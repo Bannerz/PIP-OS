@@ -3,8 +3,6 @@ import sys
 from modules.ui_elements.header import Header
 from modules.ui_elements.footer import Footer
 from screen_manager import ScreenManager
-from modules.stat.stat_screen import StatPage
-from modules.inv.inv_screen import Screen2
 
 # Initialize Pygame
 pygame.init()
@@ -23,25 +21,26 @@ birthday = "1997-02-08"
 # Create instance of Header and Footer
 header_height = 40
 footer_height = 20
+gap = 2  # Gap between the map and header/footer
+
+# Calculate content height with gaps
+content_height = SCREEN_HEIGHT - header_height - footer_height - 2 * gap
+content_width = SCREEN_WIDTH
+
 header = Header(SCREEN_WIDTH, header_height)
 footer = Footer(SCREEN_WIDTH, footer_height, birthday)
 
+mapbox_api_key = "pk.eyJ1IjoiYmFubmVyeiIsImEiOiJjbHd6aHo4MHkwN2U2MmpxcGQ3M2w5eWd5In0.iSjrMliSYCJbQZl_dsyERQ"
+
 # Create instance of ScreenManager
-content_height = SCREEN_HEIGHT - header_height - footer_height
-screen_manager = ScreenManager(SCREEN_WIDTH, content_height)
-
-# Create instance of StatPage
-stat_page = StatPage(SCREEN_WIDTH, content_height)
-
-# Create instance of InvScreen
-inv_screen = Screen2(SCREEN_WIDTH, content_height)
+screen_manager = ScreenManager(SCREEN_WIDTH, content_height, mapbox_api_key)
 
 # Define screen pages
 PAGES = ["STAT", "INV", "DATA", "MAP", "RADIO"]
 
 # Main loop
 running = True
-current_page = 0
+current_page = 0  # Set to STAT page for now
 
 while running:
     for event in pygame.event.get():
@@ -60,56 +59,25 @@ while running:
             elif event.key == pygame.K_F4:
                 current_page = 3
                 screen_manager.set_active_screen('screen4')
+                screen_manager.screens['screen4'].fetch_map(screen_manager.screens['screen4'].latitude, screen_manager.screens['screen4'].longitude)
             elif event.key == pygame.K_F5:
                 current_page = 4
                 screen_manager.set_active_screen('screen5')
             header.set_selected_index(current_page)
 
-            # Handle submenu navigation for STAT, INV, and DATA
-            if current_page == 0:
-                if event.key == pygame.K_1:
-                    stat_page.set_selected_index(0)
-                elif event.key == pygame.K_2:
-                    stat_page.set_selected_index(1)
-                elif event.key == pygame.K_3:
-                    stat_page.set_selected_index(2)
-                stat_page.handle_event(event)
-            elif current_page == 1:
-                if event.key == pygame.K_1:
-                    inv_screen.set_selected_index(0)
-                elif event.key == pygame.K_2:
-                    inv_screen.set_selected_index(1)
-                elif event.key == pygame.K_3:
-                    inv_screen.set_selected_index(2)
-                elif event.key == pygame.K_4:
-                    inv_screen.set_selected_index(3)
-                elif event.key == pygame.K_5:
-                    inv_screen.set_selected_index(4)
-                inv_screen.handle_event(event)
-            elif current_page == 2:
-                if event.key == pygame.K_1:
-                    data_screen.set_selected_index(0)
-                elif event.key == pygame.K_2:
-                    data_screen.set_selected_index(1)
-                elif event.key == pygame.K_3:
-                    data_screen.set_selected_index(2)
-                data_screen.handle_event(event)
+        # Handle events for the active screen
+        screen_manager.active_screen.handle_event(event)
 
     # Fill the background
     screen.fill((0, 0, 0))  # Black background
 
     # Draw header and footer
     header.draw(screen)
-    footer.draw(screen)
-    
-    # Draw the active screen
-    content_surface = screen.subsurface((0, header_height, SCREEN_WIDTH, content_height))
-    if current_page == 0:
-        stat_page.draw(content_surface)
-    elif current_page == 1:
-        inv_screen.draw(content_surface)
-    else:
-        screen_manager.draw(content_surface)
+    footer.draw(screen, "inventory" if current_page == 1 else "default")
+
+    # Draw the active screen with gaps
+    content_surface = screen.subsurface((0, header_height + gap, content_width, content_height))
+    screen_manager.draw(content_surface)
 
     # Update the display
     pygame.display.flip()

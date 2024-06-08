@@ -38,6 +38,12 @@ class StatPage:
                 self.set_selected_index((self.submenu_selected_index - 1) % len(self.submenu_items))
             elif event.key == pygame.K_RIGHT:
                 self.set_selected_index((self.submenu_selected_index + 1) % len(self.submenu_items))
+            elif event.key == pygame.K_1:
+                self.set_selected_index(0)
+            elif event.key == pygame.K_2:
+                self.set_selected_index(1)
+            elif event.key == pygame.K_3:
+                self.set_selected_index(2)
             else:
                 self.active_page.handle_event(event)
 
