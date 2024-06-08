@@ -6,9 +6,9 @@ class QuestsPage:
         self.width = width
         self.height = height
         self.quests = [
-            {"name": "Quest 1", "description": "Description of Quest 1.", "gif": "img\perks\charisma.gif"},
-            {"name": "Quest 2", "description": "Description of Quest 2.", "gif": "img\perks\charisma.gif"},
-            {"name": "Quest 3", "description": "Description of Quest 3.", "gif": "img\perks\charisma.gif"},
+            {"name": "Quest 1", "description": "Description of Quest 1.", "gif": "img/perks/charisma.gif"},
+            {"name": "Quest 2", "description": "Description of Quest 2.", "gif": "img/perks/charisma.gif"},
+            {"name": "Quest 3", "description": "Description of Quest 3.", "gif": "img/perks/charisma.gif"},
         ]
 
         self.selected_index = 0
