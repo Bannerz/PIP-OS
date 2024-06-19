@@ -1,5 +1,6 @@
 import pygame
 import sys
+import subprocess
 from modules.ui_elements.header import Header
 from modules.ui_elements.footer import Footer
 from screen_manager import ScreenManager
@@ -32,8 +33,10 @@ footer = Footer(SCREEN_WIDTH, footer_height, birthday)
 
 mapbox_api_key = "pk.eyJ1IjoiYmFubmVyeiIsImEiOiJjbHd6aHo4MHkwN2U2MmpxcGQ3M2w5eWd5In0.iSjrMliSYCJbQZl_dsyERQ"
 
+audio_dir = "modules/radio/sounds"
+
 # Create instance of ScreenManager
-screen_manager = ScreenManager(SCREEN_WIDTH, content_height, mapbox_api_key)
+screen_manager = ScreenManager(SCREEN_WIDTH, content_height, mapbox_api_key, audio_dir)
 
 # Define screen pages
 PAGES = ["STAT", "INV", "DATA", "MAP", "RADIO"]

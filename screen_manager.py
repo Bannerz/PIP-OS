@@ -2,10 +2,10 @@ from modules.stat.stat_screen import StatPage
 from modules.inv.inv_screen import InvPage
 from modules.data.data_screen import DataPage
 from modules.map.map_screen import MapPage
-from modules.radio.radio_screen import Screen5
+from modules.radio.radio_screen import RadioPage
 
 class ScreenManager:
-    def __init__(self, width, height, mapbox_api_key):
+    def __init__(self, width, height, mapbox_api_key, audio_dir):
         self.width = width
         self.height = height
         self.screens = {
@@ -13,7 +13,7 @@ class ScreenManager:
             'screen2': InvPage(width, height),
             'screen3': DataPage(width, height),
             'screen4': MapPage(width, height, mapbox_api_key),
-            'screen5': Screen5(width, height),
+            'screen5': RadioPage(width, height, audio_dir),
         }
         self.active_screen = self.screens['screen1']
 
