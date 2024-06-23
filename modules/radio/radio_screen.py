@@ -58,22 +58,21 @@ class RadioPage:
             return
 
         file_path = os.path.join(self.audio_dir, self.audio_files[self.selected_index])
-        
-        if file_path.endswith(".mp3") or file_path.endswith(".ogg"):
-            audio = AudioSegment.from_file(file_path)
-            wav_data = np.array(audio.get_array_of_samples())
-            sample_rate = audio.frame_rate
-        else:
-            sample_rate, wav_data = wavfile.read(file_path)
+
+        # Use pydub to read the audio file and convert to WAV format
+        audio = AudioSegment.from_file(file_path)
+        samples = np.array(audio.get_array_of_samples())
+        sample_rate = audio.frame_rate
 
         # Normalize and convert to mono if necessary
-        if len(wav_data.shape) == 2:
-            wav_data = wav_data.mean(axis=1)
-        wav_data = wav_data / np.max(np.abs(wav_data))
+        if audio.channels > 1:
+            samples = samples.reshape((-1, audio.channels))
+            samples = samples.mean(axis=1)
+        samples = samples / np.max(np.abs(samples))
 
         # Generate waveform image
         fig, ax = plt.subplots()
-        ax.plot(wav_data[:1000])  # Plot first 1000 samples for performance reasons
+        ax.plot(samples[:1000])  # Plot first 1000 samples for performance reasons
         ax.axis('off')
         buf = BytesIO()
         plt.savefig(buf, format='png')
