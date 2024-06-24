@@ -61,6 +61,9 @@ class RadioPage:
 
         # Load initial playlist and play audio
         self.load_playlist()
+        
+        self.dial_switch = pygame.mixer.Sound("modules/ui_elements/UISounds/dial_move.ogg")
+
 
     def set_arrow_scale(self, scale):
         self.arrow_scale = scale
@@ -70,6 +73,7 @@ class RadioPage:
     def handle_event(self, event):
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_UP:
+                self.dial_switch.play()
                 if self.selected_index > 0:
                     self.selected_index -= 1
                     if self.selected_index < self.scroll_offset:
@@ -77,6 +81,7 @@ class RadioPage:
                 print(f"Selected index: {self.selected_index}")
                 self.load_playlist()
             elif event.key == pygame.K_DOWN:
+                self.dial_switch.play()
                 if self.selected_index < len(self.directories) - 1:
                     self.selected_index += 1
                     if self.selected_index >= self.scroll_offset + self.max_visible_items:
@@ -84,7 +89,7 @@ class RadioPage:
                 print(f"Selected index: {self.selected_index}")
                 self.load_playlist()
         elif event.type == self.WAVEFORM_UPDATE_EVENT:
-            print("Waveform update event triggered")
+            #print("Waveform update event triggered")
             self.update_waveform()
 
     def draw(self, screen):

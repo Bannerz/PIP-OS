@@ -52,6 +52,8 @@ class StatusPage:
         self.font_path = "fonts/monofonto.ttf"  # Replace with actual path to your custom font file
         self.font = pygame.font.Font(self.font_path, 16)  # Load custom font
         self.banner_font = pygame.font.Font(self.font_path, 18)  # Load custom font for banner text
+        
+        
 
     def load_icon(self, path):
         try:

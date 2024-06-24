@@ -3,7 +3,10 @@ import sys
 import subprocess
 from modules.ui_elements.header import Header
 from modules.ui_elements.footer import Footer
+from modules.boot.boot import InitialAnimation
 from screen_manager import ScreenManager
+from gif_loader import GifLoader
+import time
 
 # Initialize Pygame
 pygame.init()
@@ -16,7 +19,7 @@ SCREEN_HEIGHT = 320
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT), pygame.NOFRAME)
 pygame.display.set_caption('RobCo PIP-OS v1')
 
-#hide mouse
+# Hide mouse
 pygame.mouse.set_visible(0)
 
 # User's birthday (YYYY-MM-DD)
@@ -38,11 +41,24 @@ mapbox_api_key = "pk.eyJ1IjoiYmFubmVyeiIsImEiOiJjbHd6aHo4MHkwN2U2MmpxcGQ3M2w5eWd
 
 audio_dir = "modules/radio/sounds"
 
+
+main_switch = pygame.mixer.Sound("modules/ui_elements/UISounds/module_change.ogg")
+
+
+
 # Create instance of ScreenManager
 screen_manager = ScreenManager(SCREEN_WIDTH, content_height, mapbox_api_key, audio_dir)
 
 # Define screen pages
 PAGES = ["STAT", "INV", "DATA", "MAP", "RADIO"]
+
+# Animation complete flag
+animation_complete = False
+
+# Create the initial animation instance
+font_path = 'fonts/TechMono.ttf'
+animation = InitialAnimation(screen, font_path, lambda: setattr(animation, 'animation_complete', True))
+animation.setup()
 
 # Main loop
 running = True
@@ -52,42 +68,54 @@ while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
-        elif event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_F1:
-                current_page = 0
-                screen_manager.set_active_screen('screen1')
-            elif event.key == pygame.K_F2:
-                current_page = 1
-                screen_manager.set_active_screen('screen2')
-            elif event.key == pygame.K_F3:
-                current_page = 2
-                screen_manager.set_active_screen('screen3')
-            elif event.key == pygame.K_F4:
-                current_page = 3
-                screen_manager.set_active_screen('screen4')
-                screen_manager.screens['screen4'].fetch_map(screen_manager.screens['screen4'].latitude, screen_manager.screens['screen4'].longitude)
-            elif event.key == pygame.K_F5:
-                current_page = 4
-                screen_manager.set_active_screen('screen5')
-            header.set_selected_index(current_page)
+        if not animation.animation_complete:
+            animation.handle_event(event)
+        else:
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_F1:
+                    main_switch.play()
+                    current_page = 0
+                    screen_manager.set_active_screen('screen1')
+                elif event.key == pygame.K_F2:
+                    main_switch.play()
+                    current_page = 1
+                    screen_manager.set_active_screen('screen2')
+                elif event.key == pygame.K_F3:
+                    main_switch.play()
+                    current_page = 2
+                    screen_manager.set_active_screen('screen3')
+                elif event.key == pygame.K_F4:
+                    main_switch.play()
+                    current_page = 3
+                    screen_manager.set_active_screen('screen4')
+                    screen_manager.screens['screen4'].fetch_map(screen_manager.screens['screen4'].latitude, screen_manager.screens['screen4'].longitude)
+                elif event.key == pygame.K_F5:
+                    main_switch.play()
+                    current_page = 4
+                    screen_manager.set_active_screen('screen5')
+                header.set_selected_index(current_page)
 
-        # Handle events for the active screen
-        screen_manager.active_screen.handle_event(event)
+            # Handle events for the active screen
+            screen_manager.active_screen.handle_event(event)
 
     # Fill the background
     screen.fill((0, 0, 0))  # Black background
 
-    # Draw header and footer
-    header.draw(screen)
-    footer.draw(screen, "inventory" if current_page == 1 else "default")
+    if not animation.animation_complete:
+        animation.draw()
+    else:
+        # Draw header and footer
+        header.draw(screen)
+        footer.draw(screen, "inventory" if current_page == 1 else "default")
 
-    # Draw the active screen with gaps
-    content_surface = screen.subsurface((0, header_height + gap, content_width, content_height))
-    screen_manager.draw(content_surface)
+        # Draw the active screen with gaps
+        content_surface = screen.subsurface((0, header_height + gap, content_width, content_height))
+        screen_manager.draw(content_surface)
 
     # Update the display
     pygame.display.flip()
+    time.sleep(0.01)  # Cap the frame rate
 
-# Quit Pygame
+animation.cleanup()
 pygame.quit()
 sys.exit()

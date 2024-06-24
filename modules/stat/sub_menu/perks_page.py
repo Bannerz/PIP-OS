@@ -60,6 +60,8 @@ class PerksPage:
         self.up_arrow = pygame.image.load("img/ui/up_arrow.png")
         self.down_arrow = pygame.image.load("img/ui/down_arrow.png")
         self.set_arrow_scale(self.arrow_scale)
+        
+        self.dial_switch = pygame.mixer.Sound("modules/ui_elements/UISounds/dial_move.ogg")
 
     def set_arrow_scale(self, scale):
         self.arrow_scale = scale
@@ -69,12 +71,14 @@ class PerksPage:
     def handle_event(self, event):
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_UP:
+                self.dial_switch.play()
                 if self.selected_index > 0:
                     self.selected_index -= 1
                     self.gif_loader = GifLoader(self.gifs[self.selected_index])
                     if self.selected_index < self.scroll_offset:
                         self.scroll_offset = self.selected_index
             elif event.key == pygame.K_DOWN:
+                self.dial_switch.play()
                 if self.selected_index < len(self.perks) - 1:
                     self.selected_index += 1
                     self.gif_loader = GifLoader(self.gifs[self.selected_index])

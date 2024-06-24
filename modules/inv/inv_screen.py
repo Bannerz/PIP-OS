@@ -24,6 +24,8 @@ class InvPage:
         self.misc_page = MiscPage(width, content_height)
         self.ammo_page = AmmoPage(width, content_height)
         self.active_page = self.weapons_page
+        
+        self.sub_switch = pygame.mixer.Sound("modules/ui_elements/UISounds/submodule_change.ogg")
 
     def set_selected_index(self, index):
         self.submenu_selected_index = index
@@ -41,14 +43,19 @@ class InvPage:
     def handle_event(self, event):
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_1:
+                self.sub_switch.play()
                 self.set_selected_index(0)
             elif event.key == pygame.K_2:
+                self.sub_switch.play()
                 self.set_selected_index(1)
             elif event.key == pygame.K_3:
+                self.sub_switch.play()
                 self.set_selected_index(2)
             elif event.key == pygame.K_4:
+                self.sub_switch.play()
                 self.set_selected_index(3)
             elif event.key == pygame.K_5:
+                self.sub_switch.play()
                 self.set_selected_index(4)
             else:
                 self.active_page.handle_event(event)

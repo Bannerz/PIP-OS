@@ -22,6 +22,8 @@ class StatPage:
         self.special_page = SpecialPage(width, content_height)
         self.perks_page = PerksPage(width, content_height)
         self.active_page = self.status_page
+        
+        self.sub_switch = pygame.mixer.Sound("modules/ui_elements/UISounds/submodule_change.ogg")
 
     def set_selected_index(self, index):
         self.submenu_selected_index = index
@@ -34,15 +36,14 @@ class StatPage:
 
     def handle_event(self, event):
         if event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_LEFT:
-                self.set_selected_index((self.submenu_selected_index - 1) % len(self.submenu_items))
-            elif event.key == pygame.K_RIGHT:
-                self.set_selected_index((self.submenu_selected_index + 1) % len(self.submenu_items))
-            elif event.key == pygame.K_1:
+            if event.key == pygame.K_1:
+                self.sub_switch.play()
                 self.set_selected_index(0)
             elif event.key == pygame.K_2:
+                self.sub_switch.play()
                 self.set_selected_index(1)
             elif event.key == pygame.K_3:
+                self.sub_switch.play()
                 self.set_selected_index(2)
             else:
                 self.active_page.handle_event(event)

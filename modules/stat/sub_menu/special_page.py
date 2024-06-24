@@ -47,13 +47,17 @@ class SpecialPage:
         
         # Manually set the desired size for the GIF
         self.gif_size = (130, 130)
+        
+        self.dial_switch = pygame.mixer.Sound("modules/ui_elements/UISounds/dial_move.ogg")
 
     def handle_event(self, event):
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_UP:
+                self.dial_switch.play()
                 self.selected_index = (self.selected_index - 1) % len(self.attributes)
                 self.gif_loader = GifLoader(self.gifs[self.selected_index])
             elif event.key == pygame.K_DOWN:
+                self.dial_switch.play()
                 self.selected_index = (self.selected_index + 1) % len(self.attributes)
                 self.gif_loader = GifLoader(self.gifs[self.selected_index])
 
