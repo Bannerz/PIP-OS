@@ -6,9 +6,10 @@ class HolotapesPage:
         self.width = width
         self.height = height
         self.holotapes = [
-            {"name": "Holotape 1", "gif": "img/items/holotape.gif"},
-            {"name": "Holotape 2", "gif": "img/items/holotape.gif"},
-            {"name": "Holotape 3", "gif": "img/items/holotape.gif"},
+            {"name": "Atomic Command", "gif": "img/items/holotape.gif"},
+            {"name": "Grognak & the Ruby Ruins", "gif": "img/items/holotape.gif"},
+            {"name": "Pipfall", "gif": "img/items/holotape.gif"},
+            {"name": "Red Menace", "gif": "img/items/holotape.gif"}
         ]
 
         self.selected_index = 0
