@@ -14,7 +14,7 @@ SCREEN_HEIGHT = 320
 
 # Set up the display
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT), pygame.NOFRAME)
-pygame.display.set_caption('Pygame Header and Footer Example')
+pygame.display.set_caption('RobCo PIP-OS v1')
 
 #hide mouse
 pygame.mouse.set_visible(0)
