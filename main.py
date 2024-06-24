@@ -13,8 +13,11 @@ SCREEN_WIDTH = 480
 SCREEN_HEIGHT = 320
 
 # Set up the display
-screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT), pygame.NOFRAME)
 pygame.display.set_caption('Pygame Header and Footer Example')
+
+#hide mouse
+pygame.mouse.set_visible(0)
 
 # User's birthday (YYYY-MM-DD)
 birthday = "1997-02-08"
