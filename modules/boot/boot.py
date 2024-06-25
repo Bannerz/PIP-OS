@@ -2,7 +2,7 @@ import pygame
 import time
 from gif_loader import GifLoader
 
-class InitialAnimation:
+class BootAnim:
     def __init__(self, screen, font_path, on_complete):
         self.screen = screen
         self.font_path = font_path
@@ -118,9 +118,9 @@ class InitialAnimation:
             "starting EFI0 0x0000A4 0x00000000000000000 1 0 0x0000A4  ",
             "0x00000000000000000 start memory discovery0 0x0000A4 0x00000000000000000 END"
                              ]
-        
+
         self.char_text = [
-            "*************** PIP-0S (R) V7.1.0.8 ***************",
+            "************ PIP-0S (R) V7.1.0.8 ******************",
             " ",
             " ",
             " ",
@@ -132,7 +132,7 @@ class InitialAnimation:
             "NO HOLOTAPE FOUND ",
             "LOAD ROM(1): DEITRIX 303 "
         ]
-        
+
         self.scroll_y = self.screen.get_height()
         self.char_labels = [""] * len(self.char_text)
         self.cursor_visible = False
@@ -222,14 +222,14 @@ class InitialAnimation:
             self.display_gif()
 
     def display_gif(self):
-        self.gif_loader = GifLoader('animation.gif')
+        self.gif_loader = GifLoader('modules/boot/boot_thumb.gif')
         self.gif = self.gif_loader.get_current_frame()
 
         # Get original dimensions
         original_width, original_height = self.gif.get_size()
 
         # Scale the GIF while maintaining aspect ratio
-        desired_height = 180
+        desired_height = 100
         aspect_ratio = original_width / original_height
         scaled_width = int(desired_height * aspect_ratio)
         scaled_height = desired_height
@@ -321,24 +321,3 @@ class InitialAnimation:
     def on_complete(self):
         self.animation_complete = True  # Set the flag to True when animation is complete
         print("Animation complete")
-
-# Example usage
-if __name__ == "__main__":
-    pygame.init()
-    screen = pygame.display.set_mode((480, 320))
-    font_path = 'fonts/monofonto.ttf'
-    animation = InitialAnimation(screen, font_path, lambda: setattr(animation, 'animation_complete', True))
-    animation.setup()
-
-    running = True
-    while running:
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                running = False
-            animation.handle_event(event)
-
-        animation.draw()
-        time.sleep(0.01)  # Cap the frame rate
-
-    animation.cleanup()
-    pygame.quit()

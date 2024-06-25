@@ -3,7 +3,7 @@ import sys
 import subprocess
 from modules.ui_elements.header import Header
 from modules.ui_elements.footer import Footer
-from modules.boot.boot import InitialAnimation
+from modules.boot.boot import BootAnim
 from screen_manager import ScreenManager
 from gif_loader import GifLoader
 import time
@@ -57,7 +57,7 @@ animation_complete = False
 
 # Create the initial animation instance
 font_path = 'fonts/TechMono.ttf'
-animation = InitialAnimation(screen, font_path, lambda: setattr(animation, 'animation_complete', True))
+animation = BootAnim(screen, font_path, lambda: setattr(animation, 'animation_complete', True))
 animation.setup()
 
 # Main loop
