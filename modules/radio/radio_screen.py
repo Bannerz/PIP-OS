@@ -61,7 +61,7 @@ class RadioPage:
 
         # Load initial playlist and play audio
         self.load_playlist()
-        
+
         self.dial_switch = pygame.mixer.Sound("modules/ui_elements/UISounds/dial_move.ogg")
 
 
@@ -279,27 +279,3 @@ class RadioPage:
         self.current_song_index = (self.current_song_index + 1) % len(self.current_playlist)
         self.load_waveform()
         self.play_audio()  # Automatically play the next song
-
-# Example usage
-if __name__ == "__main__":
-    pygame.init()
-    screen = pygame.display.set_mode((640, 480))
-    pygame.display.set_caption("Radio Page Example")
-
-    audio_dir = "path/to/your/audio/files"
-    radio_page = RadioPage(640, 480, audio_dir)
-
-    running = True
-    while running:
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                running = False
-            elif event.type == pygame.USEREVENT:
-                radio_page.handle_end_of_song()
-            else:
-                radio_page.handle_event(event)
-
-        radio_page.draw(screen)
-        pygame.display.flip()
-
-    pygame.quit()

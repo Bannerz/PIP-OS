@@ -32,7 +32,7 @@ class HolotapesPage:
 
         # Gif loader for the selected holotape
         self.gif_loader = GifLoader(self.holotapes[self.selected_index]["gif"])
-        
+
         # Manually set the desired size for the GIF
         self.gif_size = (150, 150)
 
@@ -41,7 +41,7 @@ class HolotapesPage:
         self.up_arrow = pygame.image.load("img/ui/up_arrow.png")
         self.down_arrow = pygame.image.load("img/ui/down_arrow.png")
         self.set_arrow_scale(self.arrow_scale)
-        
+
         self.dial_switch = pygame.mixer.Sound("modules/ui_elements/UISounds/dial_move.ogg")
 
 
@@ -109,24 +109,3 @@ class HolotapesPage:
         gif_frame = pygame.transform.scale(gif_frame, self.gif_size)
         gif_rect = gif_frame.get_rect(topleft=(self.width - self.gif_size[0] - 20, 0))
         screen.blit(gif_frame, gif_rect)
-
-# Example usage (if running this module directly):
-if __name__ == "__main__":
-    pygame.init()
-    screen = pygame.display.set_mode((640, 480))
-    pygame.display.set_caption("Holotapes Page Example")
-    
-    holotapes_page = HolotapesPage(640, 480)
-    holotapes_page.set_arrow_scale(0.5)  # Set arrow scale factor (e.g., 0.5 for half size)
-    
-    running = True
-    while running:
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                running = False
-            holotapes_page.handle_event(event)
-        
-        holotapes_page.draw(screen)
-        pygame.display.flip()
-    
-    pygame.quit()

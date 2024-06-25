@@ -15,15 +15,15 @@ class StatusPage:
             "img/ui/lightning.png",
             "img/ui/radiation.png"
         ]  # Paths to the icon images
-        
+
         self.numbers = [None, 18, None, 10, 20, 10]
         self.icon_positions = [140, 185, 220, 265, 295, 325]
-        
+
         self.gif_position = (0, -20)  # Position offset for the GIF
         self.png_position = (0, -53)  # Position offset for the PNG
         self.gif_size = (59, 81)  # Desired size for the GIF (width, height)
         self.png_size = (30, 40)  # Desired size for the PNG (width, height)
-        
+
         self.box_size = 40
         self.rect_width = 25
         self.rect_height = self.box_size
@@ -47,13 +47,13 @@ class StatusPage:
 
         # Load icons
         self.icons = [self.load_icon(icon_path) for icon_path in self.icon_paths]
-        
+
         # Load custom font
         self.font_path = "fonts/monofonto.ttf"  # Replace with actual path to your custom font file
         self.font = pygame.font.Font(self.font_path, 16)  # Load custom font
         self.banner_font = pygame.font.Font(self.font_path, 18)  # Load custom font for banner text
-        
-        
+
+
 
     def load_icon(self, path):
         try:
@@ -132,7 +132,7 @@ class StatusPage:
                 number_rect = number_surface.get_rect(center=(box_x + box.width // 2, number_y))  # Position number within the box
                 screen.blit(number_surface, number_rect)
 
-        # Add centered text label "ZapWizard"
+        # Add centered text label "Bannerz"
         label_x = self.width // 2
         label_y = y + self.box_size + 20  # Adjust the y position as needed
         text_surface = self.banner_font.render('Bannerz', True, (0, 255, 0))

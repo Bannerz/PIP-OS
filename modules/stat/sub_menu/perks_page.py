@@ -17,7 +17,7 @@ class PerksPage:
             ("Trigger Rush", "Your Action Points regenerate 25% faster if the Hit Points value is below 25% of its maximum."),
             ("Well Rested", "+10% Experience Points for 12 hours.")
         ]
-        
+
         self.gifs = [
             "img/perks/perk1.gif",
             "img/perks/perk2.gif",
@@ -51,7 +51,7 @@ class PerksPage:
 
         # Gif loader for the selected perk
         self.gif_loader = GifLoader(self.gifs[self.selected_index])
-        
+
         # Manually set the desired size for the GIF
         self.gif_size = (150, 150)
 
@@ -60,7 +60,7 @@ class PerksPage:
         self.up_arrow = pygame.image.load("img/ui/up_arrow.png")
         self.down_arrow = pygame.image.load("img/ui/down_arrow.png")
         self.set_arrow_scale(self.arrow_scale)
-        
+
         self.dial_switch = pygame.mixer.Sound("modules/ui_elements/UISounds/dial_move.ogg")
 
     def set_arrow_scale(self, scale):
@@ -158,24 +158,3 @@ class PerksPage:
         # Add the last line
         lines.append(' '.join(current_line))
         return lines
-
-# Example usage (if running this module directly):
-if __name__ == "__main__":
-    pygame.init()
-    screen = pygame.display.set_mode((640, 480))
-    pygame.display.set_caption("Perks Page Example")
-    
-    perks_page = PerksPage(640, 480)
-    perks_page.set_arrow_scale(0.5)  # Set arrow scale factor (e.g., 0.5 for half size)
-    
-    running = True
-    while running:
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                running = False
-            perks_page.handle_event(event)
-        
-        perks_page.draw(screen)
-        pygame.display.flip()
-    
-    pygame.quit()

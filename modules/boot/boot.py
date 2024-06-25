@@ -13,7 +13,7 @@ class BootAnim:
         self.fade_cycles = 0
         self.max_fade_cycles = 2
         self.scroll_texts = [
-                                             "* 1 0 0x0000A4 0x00000000000000000 start memory discovery 0 0x0000A4 ",
+            "* 1 0 0x0000A4 0x00000000000000000 start memory discovery 0 0x0000A4 ",
             "0x00000000000000000 1 0 0x000014 0x00000000000000000 CPUO starting cell ",
             "relocation0 0x0000A4 0x00000000000000000 1 0 0x000009 ",
             "0x00000000000000000 CPUO launch EFI0 0x0000A4 0x00000000000000000 1 0 ",
@@ -117,7 +117,7 @@ class BootAnim:
             "0x0000A4 0x00000000000000000 1 0 0x000009 0x000000000000E003D CPUO  ",
             "starting EFI0 0x0000A4 0x00000000000000000 1 0 0x0000A4  ",
             "0x00000000000000000 start memory discovery0 0x0000A4 0x00000000000000000 END"
-                             ]
+        ]
 
         self.char_text = [
             "************ PIP-0S (R) V7.1.0.8 ******************",

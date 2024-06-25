@@ -84,17 +84,17 @@ class MapPage:
         """Overlay the marker image at the user's initial location."""
         map_width, map_height = image.size
         marker_width, marker_height = self.scaled_marker_image.size
-        
+
         # Calculate relative position of the marker
         marker_latitude, marker_longitude = marker_position
         lat_diff = (marker_latitude - center_latitude) * (map_height / 180)
         lon_diff = (marker_longitude - center_longitude) * (map_width / 360)
-        
+
         position = (
             map_width // 2 + int(lon_diff) - marker_width // 2,
             map_height // 2 - int(lat_diff) - marker_height // 2
         )
-        
+
         image.paste(self.scaled_marker_image, position, self.scaled_marker_image)  # Use the marker's alpha channel as mask
         return image
 
@@ -120,25 +120,3 @@ class MapPage:
             font = pygame.font.Font(None, 36)
             text = font.render("Loading map...", True, (0, 255, 0))
             screen.blit(text, (self.width // 2 - text.get_width() // 2, self.height // 2 - text.get_height() // 2))
-
-if __name__ == "__main__":
-    pygame.init()
-    screen = pygame.display.set_mode((800, 600))
-    pygame.display.set_caption("Map Page Example")
-
-    mapbox_api_key = "YOUR_MAPBOX_API_KEY"
-    map_page = MapPage(800, 600, mapbox_api_key)
-    map_page.fetch_map(map_page.latitude, map_page.longitude)
-
-    running = True
-    while running:
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                running = False
-            map_page.handle_event(event)
-
-        screen.fill((0, 0, 0))
-        map_page.draw(screen)
-        pygame.display.flip()
-
-    pygame.quit()
