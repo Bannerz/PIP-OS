@@ -3,14 +3,16 @@ import os
 import numpy as np
 import random
 from scipy.io import wavfile
+from mutagen.oggvorbis import OggVorbis
 
 class RadioPage:
-    def __init__(self, width, height, audio_dir):
+    def __init__(self, width, height, audio_dir, footer):
         self.width = width
         self.height = height
         self.audio_dir = audio_dir
         self.font_path = "fonts/RobotoCondensed-Regular.ttf"
         self.font = pygame.font.Font(self.font_path, 16)
+        self.footer = footer
 
         # Initialize Pygame mixer
         pygame.mixer.init()
@@ -31,6 +33,7 @@ class RadioPage:
         self.scroll_offset = 0
         self.current_playlist = []
         self.current_song_index = 0
+        self.radio_off_selected = False  # Flag to track if Radio Off is selected
 
         # Variables to store waveform data
         self.waveform = None
@@ -64,7 +67,6 @@ class RadioPage:
 
         self.dial_switch = pygame.mixer.Sound("modules/ui_elements/UISounds/dial_move.ogg")
 
-
     def set_arrow_scale(self, scale):
         self.arrow_scale = scale
         self.up_arrow = pygame.transform.scale(self.up_arrow, (int(self.up_arrow.get_width() * self.arrow_scale), int(self.up_arrow.get_height() * self.arrow_scale)))
@@ -89,8 +91,9 @@ class RadioPage:
                 print(f"Selected index: {self.selected_index}")
                 self.load_playlist()
         elif event.type == self.WAVEFORM_UPDATE_EVENT:
-            #print("Waveform update event triggered")
             self.update_waveform()
+        elif event.type == pygame.USEREVENT:
+            self.handle_end_of_song()
 
     def draw(self, screen):
         screen.fill(self.background_color)
@@ -113,7 +116,6 @@ class RadioPage:
 
             box_rect = pygame.Rect(10, y, 200, self.box_height)
             pygame.draw.rect(screen, box_color, box_rect)
-            #pygame.draw.rect(screen, self.box_color, box_rect, 2)
 
             directory_text = self.font.render(directory, True, text_color)
             screen.blit(directory_text, (box_rect.x + 10, box_rect.y + (self.box_height - directory_text.get_height()) // 2))
@@ -124,8 +126,8 @@ class RadioPage:
         if self.scroll_offset + visible_items < len(self.directories):
             screen.blit(self.down_arrow, (10, y + 5))
 
-        # Draw waveform
-        if self.waveform is not None:
+        # Draw waveform if Radio Off is not selected
+        if not self.radio_off_selected and self.waveform is not None:
             self.draw_graph(screen)
             self.draw_waveform(screen)
 
@@ -190,18 +192,21 @@ class RadioPage:
             pygame.mixer.music.play()
             pygame.mixer.music.set_endevent(pygame.USEREVENT)
             print(f"Playing: {file_path}")
+            self.update_footer_metadata(file_path)  # Update metadata when a song starts playing
         except pygame.error as e:
             print(f"Error playing audio: {e}")
 
     def load_playlist(self):
         print("Loading playlist")
         if self.selected_index == 0:
-            self.current_playlist = [self.radio_off_sound]
-            self.current_song_index = 0
-            self.load_waveform()
-            self.play_audio()  # Play audio immediately
+            self.current_playlist = []
+            pygame.mixer.music.stop()
+            self.waveform = None  # Clear the waveform when Radio Off is selected
+            self.footer.set_footer_text("Radio Off")
+            self.radio_off_selected = True
             return
 
+        self.radio_off_selected = False  # Reset the flag if a different option is selected
         directory_path = os.path.join(self.audio_dir, self.directories[self.selected_index])
         print(f"Loading playlist from: {directory_path}")
 
@@ -275,7 +280,29 @@ class RadioPage:
         self.waveform = fft_data
 
     def handle_end_of_song(self):
+        if not self.current_playlist:
+            return  # Prevent division by zero if playlist is empty
+
         print("End of song")
         self.current_song_index = (self.current_song_index + 1) % len(self.current_playlist)
+        if self.current_song_index == 0:
+            return  # Prevent the next song from playing if the playlist has cycled
+
         self.load_waveform()
         self.play_audio()  # Automatically play the next song
+
+    def update_footer_metadata(self, file_path):
+        # Extract and display metadata in the footer
+        metadata = ""
+        if file_path.endswith(".ogg"):
+            try:
+                audio = OggVorbis(file_path)
+                artist = audio.get("artist", ["Unknown Artist"])[0]
+                title = audio.get("title", ["Unknown Title"])[0]
+                metadata = f"{artist} - {title}"
+            except Exception as e:
+                metadata = "Unknown"
+                print(f"Error reading metadata: {e}")
+        else:
+            metadata = "Unknown"
+        self.footer.set_footer_text(metadata)

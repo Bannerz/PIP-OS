@@ -5,7 +5,7 @@ from modules.map.map_screen import MapPage
 from modules.radio.radio_screen import RadioPage
 
 class ScreenManager:
-    def __init__(self, width, height, mapbox_api_key, audio_dir):
+    def __init__(self, width, height, mapbox_api_key, audio_dir, footer):
         self.width = width
         self.height = height
         self.screens = {
@@ -13,7 +13,7 @@ class ScreenManager:
             'screen2': InvPage(width, height),
             'screen3': DataPage(width, height),
             'screen4': MapPage(width, height, mapbox_api_key),
-            'screen5': RadioPage(width, height, audio_dir),
+            'screen5': RadioPage(width, height, audio_dir, footer),
         }
         self.active_screen = self.screens['screen1']
 

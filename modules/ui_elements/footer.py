@@ -16,11 +16,11 @@ class Footer:
         self.text_color = (0, 255, 0)  # Bright green text color for contrast
         self.border_color = (0, 200, 0)  # Different green color for border
         self.progress_bg_color = (0, 50, 0)  # Darker green color for progress bar background
-        
+
         # Load custom font
         self.font_path = "fonts/RobotoCondensed-Bold.ttf"  # Replace with actual path to your custom font file
         self.font = pygame.font.Font(self.font_path, 18)  # Load custom font
-        
+
         self.birthday = birthday  # User's birthday
         self.age = self.calculate_age()  # User's age
         self.level_progress = self.calculate_progress()  # Progress towards next birthday
@@ -42,10 +42,11 @@ class Footer:
         self.caps_icon = pygame.transform.scale(self.caps_icon, (15, 15))
         self.ammo_icon = pygame.transform.scale(self.ammo_icon, (10, 10))
         self.target_icon = pygame.transform.scale(self.target_icon, (10, 10))
-        
+
         # Footer texts
         self.default_text = "Default Footer"
         self.inventory_text = "Inventory Footer: [1] Weapons [2] Apparel [3] Aid [4] Ammo [5] Misc"
+        self.radio_text = "Playing: Unknown"
         self.current_text = self.default_text
 
     def calculate_age(self):
@@ -66,11 +67,8 @@ class Footer:
         days_passed = (today - birth_date.replace(year=today.year)).days
         return days_passed / total_days
 
-    def set_footer_text(self, page):
-        if page == "inventory":
-            self.current_text = self.inventory_text
-        else:
-            self.current_text = self.default_text
+    def set_footer_text(self, text):
+        self.current_text = text
 
     def draw_default_footer(self, screen):
         # Calculate box dimensions and positions
@@ -159,16 +157,58 @@ class Footer:
         ammo_text = self.font.render(self.ammo, True, self.text_color)
         ammo_text_rect = ammo_text.get_rect(midright=(ammo_box_rect.right - 10, ammo_box_rect.centery))
         screen.blit(ammo_text, ammo_text_rect)
-        
+
         # Draw target icon to the right of the gun icon and to the left of the ammo number
         target_icon_rect = self.target_icon.get_rect(midright=(ammo_text_rect.left - 5, ammo_box_rect.centery))
         screen.blit(self.target_icon, target_icon_rect)
-        
+
         ammo_icon_rect = self.ammo_icon.get_rect(midright=(target_icon_rect.left - 5, ammo_box_rect.centery))
         screen.blit(self.ammo_icon, ammo_icon_rect)
+
+    def draw_radio_footer(self, screen):
+        # Fill the background of the footer
+        footer_rect = pygame.Rect(0, screen.get_height() - self.height, self.width, self.height)
+        screen.fill(self.box_color, footer_rect)
+
+        # Draw the radio text left justified
+        radio_text = self.font.render(self.current_text, True, self.text_color)
+        radio_text_rect = radio_text.get_rect(topleft=(10, screen.get_height() - self.height // 2 - radio_text.get_height() // 2))
+        screen.blit(radio_text, radio_text_rect)
+
+    def draw_data_footer(self, screen):
+        # Fill the background of the footer
+        footer_rect = pygame.Rect(0, screen.get_height() - self.height, self.width, self.height)
+        screen.fill(self.box_color, footer_rect)
+
+        # Get current date and time
+        now = datetime.now()
+        date_str = now.strftime("%Y-%m-%d")
+        time_str = now.strftime("%H:%M:%S")
+
+        # Render date and time
+        date_text = self.font.render(date_str, True, self.text_color)
+        time_text = self.font.render(time_str, True, self.text_color)
+
+        # Position date on the left and time on the right
+        date_text_rect = date_text.get_rect(topleft=(10, screen.get_height() - self.height // 2 - date_text.get_height() // 2))
+        time_text_rect = time_text.get_rect(topright=(self.width - 10, screen.get_height() - self.height // 2 - time_text.get_height() // 2))
+
+        screen.blit(date_text, date_text_rect)
+        screen.blit(time_text, time_text_rect)
+
+    def draw_map_footer(self, screen):
+        # Fill the background of the footer with green color
+        footer_rect = pygame.Rect(0, screen.get_height() - self.height, self.width, self.height)
+        screen.fill(self.box_color, footer_rect)
 
     def draw(self, screen, page):
         if page == "inventory":
             self.draw_inventory_footer(screen)
+        elif page == "radio":
+            self.draw_radio_footer(screen)
+        elif page == "data":
+            self.draw_data_footer(screen)
+        elif page == "map":
+            self.draw_map_footer(screen)
         else:
             self.draw_default_footer(screen)

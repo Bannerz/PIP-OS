@@ -41,13 +41,10 @@ mapbox_api_key = "pk.eyJ1IjoiYmFubmVyeiIsImEiOiJjbHd6aHo4MHkwN2U2MmpxcGQ3M2w5eWd
 
 audio_dir = "modules/radio/sounds"
 
-
 main_switch = pygame.mixer.Sound("modules/ui_elements/UISounds/module_change.ogg")
 
-
-
 # Create instance of ScreenManager
-screen_manager = ScreenManager(SCREEN_WIDTH, content_height, mapbox_api_key, audio_dir)
+screen_manager = ScreenManager(SCREEN_WIDTH, content_height, mapbox_api_key, audio_dir, footer)
 
 # Define screen pages
 PAGES = ["STAT", "INV", "DATA", "MAP", "RADIO"]
@@ -106,7 +103,7 @@ while running:
     else:
         # Draw header and footer
         header.draw(screen)
-        footer.draw(screen, "inventory" if current_page == 1 else "default")
+        footer.draw(screen, "map" if current_page == 3 else ("data" if current_page == 2 else ("radio" if current_page == 4 else ("inventory" if current_page == 1 else "default"))))
 
         # Draw the active screen with gaps
         content_surface = screen.subsurface((0, header_height + gap, content_width, content_height))
