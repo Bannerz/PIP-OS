@@ -7,6 +7,7 @@ class BootAnim:
         self.screen = screen
         self.font_path = font_path
         self.font = pygame.font.Font(font_path, 14)
+        self.scroll_font = pygame.font.Font(font_path, 12)
         if not self.font:
             print(f"Failed to load font: {font_path}")
         self.on_complete = on_complete
@@ -34,45 +35,6 @@ class BootAnim:
             "0x00000000000000000 1 0 0x0000A4 0x00000000000000000 start memory ",
             "discovery0 0x0000A4 0x00000000000000000 1 0 0x0000A4 0x00000000000000000 ",
             "start memory discovery 0 0x0000A4 0x00000000000000000 1 0 0x000014 ",
-            "0x00000000000000000 CPUO starting cell relocation0 0x0000A4  ",
-            "0x00000000000000000 1 0 0x000009 0x00000000000000000 CPUO launch EFI0  ",
-            "0x0000A4 0x00000000000000000 1 0 0x000009 0x000000000000E003D CPUO  ",
-            "starting EFI0 0x0000A4 0x00000000000000000 1 0 0x0000A4  ",
-            "0x00000000000000000 start memory discovery0 0x0000A4 0x00000000000000000  ",
-            "1 0 0x0000A4 0x00000000000000000 start memory discovery 0 0x0000A4  ",
-            "0x00000000000000000 1 0 0x000014 0x00000000000000000 CPUO starting cell  ",
-            "relocation0 0x0000A4 0x00000000000000000 1 0 0x000009  ",
-            "0x00000000000000000 CPUO launch EFI0 0x0000A4 0x00000000000000000 1 0  ",
-            "0x000009 0x000000000000E003D CPUO starting EFI0 0x0000A4  ",
-            "0x00000000000000000 1 0 0x0000A4 0x00000000000000000 start memory  ",
-            "discovery0 0x0000A4 0x00000000000000000 1 0 0x0000A4 0x00000000000000000  ",
-            "start memory discovery 0 0x0000A4 0x00000000000000000 1 0 0x000014  ",
-            "0x00000000000000000 CPUO starting cell relocation0 0x0000A4  ",
-            "0x00000000000000000 1 0 0x000009 0x00000000000000000 CPUO launch EFI0  ",
-            "0x0000A4 0x00000000000000000 1 0 0x000009 0x000000000000E003D CPUO  ",
-            "starting EFI0 0x0000A4 0x00000000000000000 1 0 0x0000A4  ",
-            "0x00000000000000000 start memory discovery0 0x0000A4 0x00000000000000000  ",
-            "1 0 0x0000A4 0x00000000000000000 start memory discovery 0 0x0000A4  ",
-            "0x00000000000000000 1 0 0x000014 0x00000000000000000 CPUO starting cell  ",
-            "relocation0 0x0000A4 0x00000000000000000 1 0 0x000009  ",
-            "0x00000000000000000 CPUO launch EFI0 0x0000A4 0x00000000000000000 1 0  ",
-            "0x000009 0x000000000000E003D CPUO starting EFI0 0x0000A4  ",
-            "0x00000000000000000 1 0 0x0000A4 0x00000000000000000 start memory  ",
-            "discovery0 0x0000A4 0x00000000000000000 1 0 0x0000A4 0x00000000000000000  ",
-            "start memory discovery 0 0x0000A4 0x00000000000000000 1 0 0x000014  ",
-            "0x00000000000000000 CPUO starting cell relocation0 0x0000A4  ",
-            "0x00000000000000000 1 0 0x000009 0x00000000000000000 CPUO launch EFI0  ",
-            "0x0000A4 0x00000000000000000 1 0 0x000009 0x000000000000E003D CPUO  ",
-            "starting EFI0 0x0000A4 0x00000000000000000 1 0 0x0000A4  ",
-            "0x00000000000000000 start memory discovery0 0x0000A4 0x00000000000000000  ",
-            "1 0 0x0000A4 0x00000000000000000 start memory discovery 0 0x0000A4  ",
-            "0x00000000000000000 1 0 0x000014 0x00000000000000000 CPUO starting cell  ",
-            "relocation0 0x0000A4 0x00000000000000000 1 0 0x000009  ",
-            "0x00000000000000000 CPUO launch EFI0 0x0000A4 0x00000000000000000 1 0  ",
-            "0x000009 0x000000000000E003D CPUO starting EFI0 0x0000A4  ",
-            "0x00000000000000000 1 0 0x0000A4 0x00000000000000000 start memory  ",
-            "discovery0 0x0000A4 0x00000000000000000 1 0 0x0000A4 0x00000000000000000  ",
-            "start memory discovery 0 0x0000A4 0x00000000000000000 1 0 0x000014  ",
             "0x00000000000000000 CPUO starting cell relocation0 0x0000A4  ",
             "0x00000000000000000 1 0 0x000009 0x00000000000000000 CPUO launch EFI0  ",
             "0x0000A4 0x00000000000000000 1 0 0x000009 0x000000000000E003D CPUO  ",
@@ -163,6 +125,19 @@ class BootAnim:
         self.typing_duration = 5000  # 5 seconds in milliseconds
         self.init_duration = 6000  # 6 seconds in milliseconds
 
+    def render_stretch_justified_text(self, screen, text, font, color, x, y, width):
+        total_text_width = sum(font.size(char)[0] for char in text)
+        if len(text) > 1:
+            space_width = (width - total_text_width) / (len(text) - 1)
+        else:
+            space_width = 0
+
+        current_x = x
+        for char in text:
+            char_surface = font.render(char, True, color)
+            screen.blit(char_surface, (current_x, y))
+            current_x += font.size(char)[0] + space_width
+
     def setup(self):
         pygame.time.set_timer(pygame.USEREVENT, self.scroll_duration // 60)
         pygame.time.set_timer(pygame.USEREVENT + 1, 500)
@@ -170,7 +145,7 @@ class BootAnim:
 
     def update_fast_scroll(self):
         self.scroll_y -= 50
-        if self.scroll_y <= -len(self.scroll_texts) * 20:
+        if self.scroll_y <= -len(self.scroll_texts) * 10:
             pygame.time.set_timer(pygame.USEREVENT, 0)
             self.scrolling_finished = True
             self.start_text_printing()
@@ -266,8 +241,7 @@ class BootAnim:
 
         if not self.scrolling_finished:
             for i, text in enumerate(self.scroll_texts):
-                label = self.font.render(text, True, (0, 255, 0))
-                self.screen.blit(label, (10, self.scroll_y + i * 20))
+                self.render_stretch_justified_text(self.screen, text, self.scroll_font, (0, 255, 0), 10, self.scroll_y + i * 10, self.screen.get_width() - 20)
         else:
             y = self.text_y
             for i, label in enumerate(self.char_labels):
