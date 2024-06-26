@@ -1,5 +1,5 @@
 import pygame
-from gif_loader import GifLoader  # Ensure the GIF loader script is available and correctly implemented
+from gif_loader_2 import GifLoader  # Ensure the GIF loader script is available and correctly implemented
 
 class HolotapesPage:
     def __init__(self, width, height):

@@ -1,6 +1,6 @@
 import pygame
 import time
-from gif_loader import GifLoader
+from gif_loader_2 import GifLoader
 
 class BootAnim:
     def __init__(self, screen, font_path, on_complete):

@@ -1,5 +1,5 @@
 import pygame
-from gif_loader import GifLoader  # Assuming the GIF loader script is named gif_loader.py
+from gif_loader_2 import GifLoader  # Assuming the GIF loader script is named gif_loader.py
 
 class MiscPage:
     def __init__(self, width, height):
@@ -39,7 +39,7 @@ class MiscPage:
         self.gif_scale = 0.5  # Set the desired scale for the GIFs
 
         self.update_gif_loader()  # Ensure the GIF is loaded initially
-        
+
         self.dial_switch = pygame.mixer.Sound("modules/ui_elements/UISounds/dial_move.ogg")
 
     def set_arrow_scale(self, scale):

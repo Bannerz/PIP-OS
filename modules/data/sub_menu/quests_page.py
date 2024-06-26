@@ -6,9 +6,9 @@ class QuestsPage:
         self.width = width
         self.height = height
         self.quests = [
-            {"name": "Drink like you're dying", "description": "Drink as much alcohol as you can before leaving.", "gif": "img/perks/charisma.gif"},
+            {"name": "Drink like you're dying", "description": "Drink as much alcohol as you can before leaving.", "gif": "img/perks/Alcoholic.gif"},
             {"name": "Making friends is hard", "description": "Attempt to make friends wtih strangers.", "gif": "img/perks/charisma.gif"},
-            {"name": "The Irish Goodbye", "description": "Make a stealthy escape from this social gathering.", "gif": "img/perks/charisma.gif"},
+            {"name": "The Irish Goodbye", "description": "Make a stealthy escape from this social gathering.", "gif": "img/perks/RaiderOperators.gif"},
         ]
 
         self.selected_index = 0
@@ -33,7 +33,7 @@ class QuestsPage:
         self.gif_loader = GifLoader(self.quests[self.selected_index]["gif"])
 
         # Manually set the desired size for the GIF
-        self.gif_size = (150, 150)
+        self.gif_size = (247, 195)
 
         # Load and scale arrows
         self.arrow_scale = 0.5  # Default scale factor
@@ -105,7 +105,7 @@ class QuestsPage:
         # Draw selected GIF
         gif_frame = self.gif_loader.get_current_frame()
         gif_frame = pygame.transform.scale(gif_frame, self.gif_size)
-        gif_rect = gif_frame.get_rect(topleft=(self.width - self.gif_size[0] - 20, 0))
+        gif_rect = gif_frame.get_rect(topleft=(220, -30))  # Adjusted y position for better layout
         screen.blit(gif_frame, gif_rect)
 
         # Calculate max_width for text wrapping
@@ -113,7 +113,7 @@ class QuestsPage:
         desc_lines = self.wrap_text(self.quests[self.selected_index]["description"], self.desc_font, max_width)
         for i, line in enumerate(desc_lines):
             desc_text = self.desc_font.render(line, True, (0, 255, 0))
-            desc_rect = desc_text.get_rect(topleft=(self.width // 2 + 20, gif_rect.bottom + 10 + i * self.desc_font.get_height()))
+            desc_rect = desc_text.get_rect(topleft=(self.width // 2 + 20, gif_rect.bottom - 20 + i * self.desc_font.get_height()))
             screen.blit(desc_text, desc_rect)
 
     def wrap_text(self, text, font, max_width):

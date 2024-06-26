@@ -6,7 +6,7 @@ class StatusPage:
         self.width = width
         self.height = height
         self.gif_path = "img/ui/body.gif"  # Path to the GIF file
-        self.png_path = "img/ui/head.png"  # Path to the PNG file
+        self.png_path = "img/ui/head.gif"  # Path to the PNG file
         self.icon_paths = [
             "img/ui/gun.png",
             "img/ui/target.png",
@@ -42,8 +42,7 @@ class StatusPage:
         self.rect_right_bottom_y = 70
 
         self.gif = GifLoader(self.gif_path)  # Use GifLoader class to load and animate the GIF
-        self.png = pygame.image.load(self.png_path).convert_alpha()  # Load PNG image
-        self.png = pygame.transform.scale(self.png, self.png_size)  # Scale PNG image
+        self.gif2 = GifLoader(self.png_path)  # Use GifLoader class to load and animate the GIF
 
         # Load icons
         self.icons = [self.load_icon(icon_path) for icon_path in self.icon_paths]
@@ -77,32 +76,35 @@ class StatusPage:
         gif_rect = gif_frame.get_rect(center=(self.width // 2 + self.gif_position[0], self.height // 2 + self.gif_position[1]))
         screen.blit(gif_frame, gif_rect)
 
-        # Draw PNG
-        png_rect = self.png.get_rect(center=(gif_rect.centerx + self.png_position[0], gif_rect.centery + self.png_position[1]))
-        screen.blit(self.png, png_rect)
+        # Get and draw the current frame of the animated GIF
+        gif_frame2 = self.gif2.get_current_frame()
+        gif_frame2 = pygame.transform.scale(gif_frame2, self.png_size)  # Scale the GIF frame
+        gif_rect2 = gif_frame2.get_rect(center=(gif_rect.centerx + self.png_position[0], gif_rect.centery + self.png_position[1] + 3))
+        screen.blit(gif_frame2, gif_rect2)
+
 
         # Draw green rectangles around GIF and PNG
         rectangle_color = (0, 255, 0)
         rectangle_width, rectangle_height = self.rectangle_size
 
         # Rectangle above the PNG
-        rect_above = pygame.Rect(png_rect.centerx - rectangle_width // 2, png_rect.top + self.rect_above_y, rectangle_width, rectangle_height)
+        rect_above = pygame.Rect(gif_rect2.centerx - rectangle_width // 2, gif_rect2.top + self.rect_above_y, rectangle_width, rectangle_height)
         pygame.draw.rect(screen, rectangle_color, rect_above)
 
         # Rectangles on the left of the PNG (corresponding to the body)
-        rect_left_top = pygame.Rect(png_rect.left - rectangle_width - self.rectangle_gap, png_rect.centery + self.rect_left_top_y, rectangle_width, rectangle_height)
+        rect_left_top = pygame.Rect(gif_rect2.left - rectangle_width - self.rectangle_gap, gif_rect2.centery + self.rect_left_top_y, rectangle_width, rectangle_height)
         pygame.draw.rect(screen, rectangle_color, rect_left_top)
-        rect_left_bottom = pygame.Rect(png_rect.left - rectangle_width - self.rectangle_gap, png_rect.centery + self.rect_left_bottom_y, rectangle_width, rectangle_height)
+        rect_left_bottom = pygame.Rect(gif_rect2.left - rectangle_width - self.rectangle_gap, gif_rect2.centery + self.rect_left_bottom_y, rectangle_width, rectangle_height)
         pygame.draw.rect(screen, rectangle_color, rect_left_bottom)
 
         # Rectangles on the right of the PNG (corresponding to the body)
-        rect_right_top = pygame.Rect(png_rect.right + self.rectangle_gap, png_rect.centery + self.rect_right_top_y, rectangle_width, rectangle_height)
+        rect_right_top = pygame.Rect(gif_rect2.right + self.rectangle_gap, gif_rect2.centery + self.rect_right_top_y, rectangle_width, rectangle_height)
         pygame.draw.rect(screen, rectangle_color, rect_right_top)
-        rect_right_bottom = pygame.Rect(png_rect.right + self.rectangle_gap, png_rect.centery + self.rect_right_bottom_y, rectangle_width, rectangle_height)
+        rect_right_bottom = pygame.Rect(gif_rect2.right + self.rectangle_gap, gif_rect2.centery + self.rect_right_bottom_y, rectangle_width, rectangle_height)
         pygame.draw.rect(screen, rectangle_color, rect_right_bottom)
 
         # Rectangle below the GIF
-        rect_below = pygame.Rect(png_rect.centerx - rectangle_width // 2, png_rect.bottom + self.rect_below_y, rectangle_width, rectangle_height)
+        rect_below = pygame.Rect(gif_rect2.centerx - rectangle_width // 2, gif_rect2.bottom + self.rect_below_y, rectangle_width, rectangle_height)
         pygame.draw.rect(screen, rectangle_color, rect_below)
 
         # Move the entire line up a bit to avoid the footer

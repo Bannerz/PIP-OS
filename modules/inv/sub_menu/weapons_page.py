@@ -1,5 +1,5 @@
 import pygame
-from gif_loader import GifLoader  # Assuming the GIF loader script is named gif_loader.py
+from gif_loader_2 import GifLoader  # Assuming the GIF loader script is named gif_loader.py
 
 
 class WeaponsPage:
@@ -48,7 +48,7 @@ class WeaponsPage:
         self.gif_scale = 0.5  # Set the desired scale for the GIFs
 
         self.update_gif_loader()  # Ensure the GIF is loaded initially
-        
+
         self.dial_switch = pygame.mixer.Sound("modules/ui_elements/UISounds/dial_move.ogg")
 
 
@@ -175,7 +175,7 @@ class WeaponsPage:
 
                 attr_value_text = self.attribute_font.render(str(attr_value), True, self.attribute_text_color)
                 screen.blit(attr_value_text, (attr_rect.right - attr_value_text.get_width() - 10, attr_rect.y + (attr_rect.height - attr_value_text.get_height()) // 2))
-                
+
 
 
     def wrap_text(self, text, font, max_width):

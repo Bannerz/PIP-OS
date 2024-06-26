@@ -1,5 +1,5 @@
 import pygame
-from gif_loader import GifLoader  # Assuming the GIF loader script is named gif_loader.py
+from gif_loader_2 import GifLoader  # Assuming the GIF loader script is named gif_loader.py
 
 class ApparelPage:
     def __init__(self, width, height):
@@ -48,9 +48,9 @@ class ApparelPage:
 
         self.gif_loader = None
         self.gif_scale = 0.5  # Set the desired scale for the GIFs
-        
+
         self.update_gif_loader()  # Ensure the GIF is loaded initially
-        
+
         self.dial_switch = pygame.mixer.Sound("modules/ui_elements/UISounds/dial_move.ogg")
 
 
@@ -137,10 +137,10 @@ class ApparelPage:
         selected_apparel_attributes = self.apparels[self.selected_index][1]
         num_attributes = len(selected_apparel_attributes)
         attribute_width = self.width // 2 - 40
-        
+
         # Calculate the total height of all attributes including gaps
-        total_height = num_attributes * (self.box_height + self.second_gap) - self.second_gap  
-        
+        total_height = num_attributes * (self.box_height + self.second_gap) - self.second_gap
+
         # Calculate the starting y position for attributes
         attribute_y = self.height - total_height - 10
 

@@ -7,7 +7,7 @@ class GifLoader:
         self.frames = self.load_gif()
         self.current_frame = 0
         self.total_frames = len(self.frames)
-        self.frame_delay = 100  # milliseconds per frame
+        self.frame_delay = 50  # milliseconds per frame
         self.last_update = pygame.time.get_ticks()
 
     def load_gif(self):

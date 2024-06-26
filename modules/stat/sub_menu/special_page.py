@@ -44,10 +44,10 @@ class SpecialPage:
 
         # Gif loader for the selected attribute
         self.gif_loader = GifLoader(self.gifs[self.selected_index])
-        
+
         # Manually set the desired size for the GIF
-        self.gif_size = (130, 130)
-        
+        self.gif_size = (247, 195)
+
         self.dial_switch = pygame.mixer.Sound("modules/ui_elements/UISounds/dial_move.ogg")
 
     def handle_event(self, event):
@@ -86,7 +86,7 @@ class SpecialPage:
         # Draw selected GIF and description
         gif_frame = self.gif_loader.get_current_frame()
         gif_frame = pygame.transform.scale(gif_frame, self.gif_size)
-        gif_rect = gif_frame.get_rect(topleft=(self.attribute_box_width + 80, 0))  # Adjusted y position for better layout
+        gif_rect = gif_frame.get_rect(topleft=(220, -30))  # Adjusted y position for better layout
         screen.blit(gif_frame, gif_rect)
 
         # Calculate max_width for text wrapping
@@ -94,7 +94,7 @@ class SpecialPage:
         desc_lines = self.wrap_text(self.attributes[self.selected_index][2], self.desc_font, max_width)
         for i, line in enumerate(desc_lines):
             desc_text = self.desc_font.render(line, True, (0, 255, 0))
-            desc_rect = desc_text.get_rect(topleft=(self.attribute_box_width + 30, gif_rect.bottom + 10 + i * self.desc_font.get_height()))
+            desc_rect = desc_text.get_rect(topleft=(self.attribute_box_width + 30, gif_rect.bottom + -20 + i * self.desc_font.get_height()))
             screen.blit(desc_text, desc_rect)
 
     def wrap_text(self, text, font, max_width):

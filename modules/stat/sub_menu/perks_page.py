@@ -19,16 +19,16 @@ class PerksPage:
         ]
 
         self.gifs = [
-            "img/perks/perk1.gif",
-            "img/perks/perk2.gif",
-            "img/perks/perk3.gif",
-            "img/perks/perk4.gif",
-            "img/perks/perk5.gif",
-            "img/perks/perk6.gif",
-            "img/perks/perk7.gif",
-            "img/perks/perk8.gif",
-            "img/perks/perk9.gif",
-            "img/perks/perk10.gif"
+            "img/perks/RaiderOperators.gif",
+            "img/perks/ActionBoy.gif",
+            "img/perks/Cloak-and-Dagger.gif",
+            "img/perks/Close-to-Metal.gif",
+            "img/perks/Combat-Medic.gif",
+            "img/perks/MP_SKAV.gif",
+            "img/perks/Quiet-Reflection.gif",
+            "img/perks/Shield-Harmonics.gif",
+            "img/perks/Trigger_Rush.gif",
+            "img/perks/Well-Rested.gif"
         ]
 
         self.selected_index = 0
@@ -53,7 +53,7 @@ class PerksPage:
         self.gif_loader = GifLoader(self.gifs[self.selected_index])
 
         # Manually set the desired size for the GIF
-        self.gif_size = (150, 150)
+        self.gif_size = (247, 195)
 
         # Load and scale arrows
         self.arrow_scale = 0.5  # Default scale factor
@@ -131,7 +131,7 @@ class PerksPage:
         # Draw selected GIF and description
         gif_frame = self.gif_loader.get_current_frame()
         gif_frame = pygame.transform.scale(gif_frame, self.gif_size)
-        gif_rect = gif_frame.get_rect(topleft=(310, -10))
+        gif_rect = gif_frame.get_rect(topleft=(220, -30))
         screen.blit(gif_frame, gif_rect)
 
         # Calculate max_width for text wrapping
@@ -139,7 +139,7 @@ class PerksPage:
         desc_lines = self.wrap_text(self.perks[self.selected_index][1], self.desc_font, max_width)
         for i, line in enumerate(desc_lines):
             desc_text = self.desc_font.render(line, True, (0, 255, 0))
-            desc_rect = desc_text.get_rect(topleft=(self.width // 2 + 20, gif_rect.bottom + 10 + i * self.desc_font.get_height()))
+            desc_rect = desc_text.get_rect(topleft=(self.width // 2 + 20, gif_rect.bottom + -20 + i * self.desc_font.get_height()))
             screen.blit(desc_text, desc_rect)
 
     def wrap_text(self, text, font, max_width):
