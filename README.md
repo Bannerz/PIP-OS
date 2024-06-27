@@ -46,6 +46,13 @@ unclutter -idle 0.01 &
 
 This minimised the Pi desktop so it looks like a black screen until it boots. You can use a Fallout themed background I guess to make it look better.
 
+to fix the window focus issue when closing atomic command I used xdotool:
+
+sudo apt-get install xdotool
+
+make sure this is installed on your Pi
+
+
 Some mentions:
 I took heavy inspiration from: https://github.com/zapwizard/pypboy - Thank you!
 Although I ended up remaking everything from scratch anyway, this project was invaluable for assets for testing and functionality 
