@@ -1,5 +1,6 @@
 import pygame
 import subprocess
+import sys
 from gif_loader_2 import GifLoader  # Ensure the GIF loader script is available and correctly implemented
 
 class HolotapesPage:
@@ -83,7 +84,8 @@ class HolotapesPage:
         if selected_holotape.get("game"):
             game_script = selected_holotape["game"]
             subprocess.Popen(["python", game_script]).wait()
-            subprocess.Popen(["xdotool", "search", "--name", "RobCo PIP-OS v1", "windowactivate"])
+            if sys.platform.startswith('linux'):
+                subprocess.Popen(["xdotool", "search", "--name", "RobCo PIP-OS v1", "windowactivate"])
         elif selected_holotape.get("audio"):
             audio_file = selected_holotape["audio"]
             pygame.mixer.music.load(audio_file)
