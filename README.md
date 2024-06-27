@@ -1,5 +1,7 @@
 This is my entry into the PIP-BOY python world...
 
+The level and xp progress is based off the users birthday. Change this in main.py. Other variables can be changed there too
+
 It's written for Python 3.11
 
 You need:
