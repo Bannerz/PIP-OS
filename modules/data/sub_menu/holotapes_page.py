@@ -8,9 +8,12 @@ class HolotapesPage:
         self.height = height
         self.holotapes = [
             {"name": "Atomic Command", "gif": "img/items/holotape.gif", "game": "modules/atomic-command/Game.py"},
-            {"name": "Grognak & the Ruby Ruins", "gif": "img/items/holotape.gif", "game": None},
-            {"name": "Pipfall", "gif": "img/items/holotape.gif", "game": None},
-            {"name": "Red Menace", "gif": "img/items/holotape.gif", "game": None}
+            {"name": "A.F.A.D. manifesto", "gif": "img/items/holotape.gif", "audio": "modules/data/sounds/AFAD_manifesto.ogg"},
+            {"name": "C.I.T. recon report", "gif": "img/items/holotape.gif", "audio": "modules/data/sounds/C.I.T._Recon_Report-Holotape.ogg"},
+            {"name": "Find the Silver Shroud", "gif": "img/items/holotape.gif", "audio": "modules/data/sounds/Find_the_Silver_Shroud.ogg"},
+            {"name": "Hi honey!", "gif": "img/items/holotape.gif", "audio": "modules/data/sounds/Nora.ogg"},
+            {"name": "Nuka-Cola Clear", "gif": "img/items/holotape.gif", "audio": "modules/data/sounds/Nuka-Cola_Clear(holodisk).ogg"},
+            {"name": "Nuka-World paramedic report", "gif": "img/items/holotape.gif", "audio": "modules/data/sounds/Nuka-World_paramedic_report.ogg"}
         ]
 
         self.selected_index = 0
@@ -45,6 +48,9 @@ class HolotapesPage:
 
         self.dial_switch = pygame.mixer.Sound("modules/ui_elements/UISounds/dial_move.ogg")
 
+        # Initialize mixer for playing audio
+        pygame.mixer.init()
+
     def set_arrow_scale(self, scale):
         self.arrow_scale = scale
         self.up_arrow = pygame.transform.scale(self.up_arrow, (int(self.up_arrow.get_width() * self.arrow_scale), int(self.up_arrow.get_height() * self.arrow_scale)))
@@ -74,9 +80,13 @@ class HolotapesPage:
 
     def launch_game(self):
         selected_holotape = self.holotapes[self.selected_index]
-        if selected_holotape["game"]:
+        if selected_holotape.get("game"):
             game_script = selected_holotape["game"]
             subprocess.Popen(["python", game_script])
+        elif selected_holotape.get("audio"):
+            audio_file = selected_holotape["audio"]
+            pygame.mixer.music.load(audio_file)
+            pygame.mixer.music.play()
 
     def draw(self, screen):
         screen.fill(self.background_color)  # Fill the background with black
@@ -117,3 +127,18 @@ class HolotapesPage:
         gif_frame = pygame.transform.scale(gif_frame, self.gif_size)
         gif_rect = gif_frame.get_rect(topleft=(self.width - self.gif_size[0] - 20, 0))
         screen.blit(gif_frame, gif_rect)
+
+# Example usage
+if __name__ == "__main__":
+    pygame.init()
+    screen = pygame.display.set_mode((480, 320))
+    holotapes_page = HolotapesPage(480, 320)
+    running = True
+    while running:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                running = False
+            holotapes_page.handle_event(event)
+        holotapes_page.draw(screen)
+        pygame.display.flip()
+    pygame.quit()
