@@ -1,4 +1,5 @@
 import pygame
+import subprocess
 from gif_loader_2 import GifLoader  # Ensure the GIF loader script is available and correctly implemented
 
 class HolotapesPage:
@@ -6,10 +7,10 @@ class HolotapesPage:
         self.width = width
         self.height = height
         self.holotapes = [
-            {"name": "Atomic Command", "gif": "img/items/holotape.gif"},
-            {"name": "Grognak & the Ruby Ruins", "gif": "img/items/holotape.gif"},
-            {"name": "Pipfall", "gif": "img/items/holotape.gif"},
-            {"name": "Red Menace", "gif": "img/items/holotape.gif"}
+            {"name": "Atomic Command", "gif": "img/items/holotape.gif", "game": "../../GitHub/PIP-OS/modules/atomic-command/Game.py"},
+            {"name": "Grognak & the Ruby Ruins", "gif": "img/items/holotape.gif", "game": None},
+            {"name": "Pipfall", "gif": "img/items/holotape.gif", "game": None},
+            {"name": "Red Menace", "gif": "img/items/holotape.gif", "game": None}
         ]
 
         self.selected_index = 0
@@ -44,7 +45,6 @@ class HolotapesPage:
 
         self.dial_switch = pygame.mixer.Sound("modules/ui_elements/UISounds/dial_move.ogg")
 
-
     def set_arrow_scale(self, scale):
         self.arrow_scale = scale
         self.up_arrow = pygame.transform.scale(self.up_arrow, (int(self.up_arrow.get_width() * self.arrow_scale), int(self.up_arrow.get_height() * self.arrow_scale)))
@@ -66,9 +66,17 @@ class HolotapesPage:
                     self.gif_loader = GifLoader(self.holotapes[self.selected_index]["gif"])
                     if self.selected_index >= self.scroll_offset + self.visible_holotapes():
                         self.scroll_offset += 1
+            elif event.key == pygame.K_RETURN:
+                self.launch_game()
 
     def visible_holotapes(self):
         return 6  # Only display 6 holotapes at a time
+
+    def launch_game(self):
+        selected_holotape = self.holotapes[self.selected_index]
+        if selected_holotape["game"]:
+            game_script = selected_holotape["game"]
+            subprocess.Popen(["python", game_script])
 
     def draw(self, screen):
         screen.fill(self.background_color)  # Fill the background with black
