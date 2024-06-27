@@ -19,17 +19,23 @@ I made it run at boot using lxsession. Here are the commands:
 sudo nano /home/pi/.config/autostart/pip-os.desktop (I had to make the directory manually)
 
 [Desktop Entry]
+
 Type=Application
+
 Name=PIP-OS
+
 Exec=/home/pi/PIP-OS/start_pip_os.sh
 
+
 chmod +x /home/pi/PIP-OS/start_pip_os.sh
+
 chmod +x /home/pi/PIP-OS/main.py
 
 I set the desktop BG to black and hid the TaskBar, I also disabled notifications in Panel Settings.
 
 I used this to hide the mouse:
 sudo apt-get update
+
 sudo apt-get install unclutter
 
 sudo nano ~/.xsessionrc
