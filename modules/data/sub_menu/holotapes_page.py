@@ -82,7 +82,8 @@ class HolotapesPage:
         selected_holotape = self.holotapes[self.selected_index]
         if selected_holotape.get("game"):
             game_script = selected_holotape["game"]
-            subprocess.Popen(["python", game_script])
+            subprocess.Popen(["python", game_script]).wait()
+            subprocess.Popen(["xdotool", "search", "--name", "RobCo PIP-OS v1", "windowactivate"])
         elif selected_holotape.get("audio"):
             audio_file = selected_holotape["audio"]
             pygame.mixer.music.load(audio_file)
