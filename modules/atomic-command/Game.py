@@ -7,6 +7,9 @@ pygame.init()
 # Set main screen's dimensions
 screen = pygame.display.set_mode((480, 320), pygame.NOFRAME)
 
+# Hide mouse
+pygame.mouse.set_visible(0)
+
 # Load the missile image
 missile_image = pygame.image.load('modules/atomic-command/Resources/bomb.png')
 missile_image = pygame.transform.scale(missile_image, (7, 22))  # Scale it to a proper size
