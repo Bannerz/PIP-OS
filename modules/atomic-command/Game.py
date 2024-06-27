@@ -12,7 +12,7 @@ missile_image = pygame.image.load('modules/atomic-command/Resources/bomb.png')
 missile_image = pygame.transform.scale(missile_image, (7, 22))  # Scale it to a proper size
 
 # Load the player image
-player_image = pygame.image.load('C:/Users/alex/Documents/GitHub/PIP-OS/modules/atomic-command/Resources/player.png')
+player_image = pygame.image.load('modules/atomic-command/Resources/player.png')
 player_image = pygame.transform.scale(player_image, (36, 60))  # Scale it to a proper size
 
 # Load the city images

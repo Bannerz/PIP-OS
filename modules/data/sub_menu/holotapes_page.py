@@ -7,7 +7,7 @@ class HolotapesPage:
         self.width = width
         self.height = height
         self.holotapes = [
-            {"name": "Atomic Command", "gif": "img/items/holotape.gif", "game": "../../GitHub/PIP-OS/modules/atomic-command/Game.py"},
+            {"name": "Atomic Command", "gif": "img/items/holotape.gif", "game": "modules/atomic-command/Game.py"},
             {"name": "Grognak & the Ruby Ruins", "gif": "img/items/holotape.gif", "game": None},
             {"name": "Pipfall", "gif": "img/items/holotape.gif", "game": None},
             {"name": "Red Menace", "gif": "img/items/holotape.gif", "game": None}
