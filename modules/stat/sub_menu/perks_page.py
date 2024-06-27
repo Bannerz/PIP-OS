@@ -6,16 +6,16 @@ class PerksPage:
         self.width = width
         self.height = height
         self.perks = [
-            ("Ace Operator", "Your stealth is increased while in shadows to 90% visibility and you deal 25% more damage with silenced weapons."),
-            ("Action Boy", "Your Action Points now regenerate 50% faster."),
-            ("Cloak & Dagger", "You gain +20% sneak attack damage and the duration of effects of Stealth Boys are increased by +40%."),
-            ("Close to Metal", "1 additional guess at choosing passwords in terminals, 50% faster terminal cooldown at hacking"),
-            ("Combat Medic", "You can heal 100 Hit Points if their current number of Hit Points is below 10%."),
-            ("Massachusetts Surgery", "Inflict +2% limb damage."),
-            ("Quiet Reflection", "+5% Experience Points for 8 hours."),
-            ("Shield Harmonics", "Your Energy Resistance is increased by +20."),
-            ("Trigger Rush", "Your Action Points regenerate 25% faster if the Hit Points value is below 25% of its maximum."),
-            ("Well Rested", "+10% Experience Points for 12 hours.")
+            ("Ace Operator", "Your stealth is increased while in shadows to 90% visibility and you deal 25% more damage with silenced weapons.", 2),
+            ("Action Boy", "Your Action Points now regenerate 50% faster.", 1),
+            ("Cloak & Dagger", "You gain +20% sneak attack damage and the duration of effects of Stealth Boys are increased by +40%.", 4),
+            ("Close to Metal", "1 additional guess at choosing passwords in terminals, 50% faster terminal cooldown at hacking", 2),
+            ("Combat Medic", "You can heal 100 Hit Points if their current number of Hit Points is below 10%.", 2),
+            ("Massachusetts Surgery", "Inflict +2% limb damage.", 3),
+            ("Quiet Reflection", "+5% Experience Points for 8 hours.", 3),
+            ("Shield Harmonics", "Your Energy Resistance is increased by +20.", 1),
+            ("Trigger Rush", "Your Action Points regenerate 25% faster if the Hit Points value is below 25% of its maximum.", 4),
+            ("Well Rested", "+10% Experience Points for 12 hours.", 1)
         ]
 
         self.gifs = [
@@ -101,7 +101,7 @@ class PerksPage:
 
         # Draw visible perks
         for i in range(self.scroll_offset, min(self.scroll_offset + visible_perks, len(self.perks))):
-            perk, desc = self.perks[i]
+            perk, desc, value = self.perks[i]
             if i == self.selected_index:
                 box_color = self.highlight_color
                 text_color = self.text_color
@@ -117,16 +117,15 @@ class PerksPage:
             screen.blit(perk_text, (box_rect.x + 10, box_rect.y + (self.perk_box_height - perk_text.get_height()) // 2))
 
             # Render value (right-aligned)
-            #value_text = self.font.render(str(value), True, text_color)
-            #value_text_rect = value_text.get_rect(right=box_rect.right - 10, centery=box_rect.centery)
-            #screen.blit(value_text, value_text_rect)
+            value_text = self.font.render(str(value), True, text_color)
+            value_text_rect = value_text.get_rect(midright=(box_rect.right - 10, box_rect.centery))
+            screen.blit(value_text, value_text_rect)
 
             y += self.perk_box_height + self.perk_gap
 
         # Draw down arrow if not at the bottom
         if self.scroll_offset + visible_perks < len(self.perks):
             screen.blit(self.down_arrow, (20, y + 3))
-
 
         # Draw selected GIF and description
         gif_frame = self.gif_loader.get_current_frame()

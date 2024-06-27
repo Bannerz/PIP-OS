@@ -81,6 +81,11 @@ class SpecialPage:
             attribute_text = self.font.render(attribute, True, text_color)
             screen.blit(attribute_text, (box_rect.x + 10, box_rect.y + (self.attribute_box_height - attribute_text.get_height()) // 2))
 
+            # Render right-aligned value
+            value_text = self.font.render(str(value), True, text_color)
+            value_rect = value_text.get_rect(right=box_rect.right - 10, centery=box_rect.centery)
+            screen.blit(value_text, value_rect)
+
             y += self.attribute_box_height + self.attribute_gap
 
         # Draw selected GIF and description
