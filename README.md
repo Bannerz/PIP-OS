@@ -60,3 +60,18 @@ Although I ended up remaking everything from scratch anyway, this project was in
 The Atomic Command game is based off of code from this git page: https://github.com/SeijiNoda/Python-Missile-Command/tree/main - Thank you!
 
 
+CONTROLS:
+F1 - F5 -> main menu navigation
+1 - 5 (number keys) -> sub menu navigation
+Arrow keys up and down -> Navigate lists
+Enter -> Select holotape (radio is automatic)
+ATOMIC COMMAND CONTROLS
+Arrow keys -> Move
+Space -> Fire
+Esc -> exit game
+y/n -> either continue or exit at end of game
+
+I will update all controls eventually to use physical buttons. The current plan is to use a raspberry pi pico connected to rotary encoders to emulate the various keyboard inputs. For now this is the simpler option for dealing with limited GPIO pins.
+
+
+
