@@ -14,9 +14,11 @@ pygame.mouse.set_visible(0)
 missile_image = pygame.image.load('modules/atomic-command/Resources/bomb.png')
 missile_image = pygame.transform.scale(missile_image, (7, 22))  # Scale it to a proper size
 
-# Load the player image
-player_image = pygame.image.load('modules/atomic-command/Resources/player.png')
-player_image = pygame.transform.scale(player_image, (36, 60))  # Scale it to a proper size
+# Load the player images
+player_base_image = pygame.image.load('modules/atomic-command/Resources/player_base.png')
+player_base_image = pygame.transform.scale(player_base_image, (36, 60))  # Scale it to a proper size
+player_gun_image = pygame.image.load('modules/atomic-command/Resources/player_gun.png')
+player_gun_image = pygame.transform.scale(player_gun_image, (7, 16))  # Scale it to a proper size
 
 # Load the city images
 city_images = [
@@ -29,7 +31,7 @@ city_images = [
 ]
 
 for i in range(len(city_images)):
-    city_images[i] = pygame.transform.scale(city_images[i], (63, 115))  # Adjust the size as needed
+    city_images[i] = pygame.transform.scale(city_images[i], (31, 58))  # Adjust the size as needed
 
 # Load the splash screen image
 splash_image = pygame.image.load('modules/atomic-command/Resources/splash.png')
@@ -51,7 +53,7 @@ class City:
     def __init__(self, index, x, sprite):
         self.index = index
         self.x = x
-        self.y = 205
+        self.y = 262
         self.status = "alive"
         self.sprite = sprite
 
@@ -79,10 +81,23 @@ bomb_state = "ready"
 bombX = playerX
 bombY = playerY
 
-def fire_bomb(x, y, r):
-    global bomb_state
-    bomb_state = "fire"
-    pygame.draw.circle(screen, bombColor, (x, y), r, 1)
+# Projectile
+
+projectile_color = (0, 255, 0)
+projectile_speed = 10
+projectile_state = "ready"
+projectile_x = 0
+projectile_y = 0
+projectile_dx = 0
+projectile_dy = 0
+
+def fire_projectile(x, y, dx, dy):
+    global projectile_state, projectile_x, projectile_y, projectile_dx, projectile_dy
+    projectile_state = "fire"
+    projectile_x = x
+    projectile_y = y
+    projectile_dx = dx
+    projectile_dy = dy
 
 # Missiles
 
@@ -111,6 +126,7 @@ points = 0
 
 def resetGame():
     global isAlive, cities, bomb_state, bombRange, bombRadius, playerX, playerY, cont, points, missilesSent, which_level
+    global projectile_state
 
     playerX = 240
     playerY = 160
@@ -121,6 +137,7 @@ def resetGame():
     which_level = 1
     points = 0
     bomb_state = "ready"
+    projectile_state = "ready"
 
     missilesList.clear()
 
@@ -156,6 +173,22 @@ if not show_splash_screen():
     pygame.quit()
     exit()
 
+# Function to rotate the image around the pivot point
+def blit_rotate_center(surf, image, pos, angle, pivot):
+    # Calculate the offset vector
+    offset_center_to_pivot = pygame.math.Vector2(pivot) - pygame.math.Vector2(image.get_size()) / 2
+    # Rotate the offset vector
+    rotated_offset = offset_center_to_pivot.rotate(-angle)
+    # Get the center of the new rectangle
+    rotated_image_center = (pos[0] - rotated_offset.x, pos[1] - rotated_offset.y)
+    # Rotate the image
+    rotated_image = pygame.transform.rotate(image, angle)
+    # Get the new rectangle
+    rotated_image_rect = rotated_image.get_rect(center=rotated_image_center)
+    # Blit the rotated image
+    surf.blit(rotated_image, rotated_image_rect.topleft)
+    return rotated_image_rect
+
 # Main game loop
 victory = False
 done = False
@@ -165,10 +198,13 @@ while not done:
             if event.type == pygame.QUIT or (event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE):
                 done = True
             if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_SPACE and bomb_state != "fire":
+                if event.key == pygame.K_SPACE and projectile_state == "ready":
                     bombX = playerX
                     bombY = playerY
-                    fire_bomb(bombX, bombY, bombRadius)
+                    dx = bombX - gun_tip_x
+                    dy = bombY - gun_tip_y
+                    dist = math.sqrt(dx ** 2 + dy ** 2)
+                    fire_projectile(gun_tip_x, gun_tip_y, dx / dist * projectile_speed, dy / dist * projectile_speed)
 
         pressed = pygame.key.get_pressed()
         if pressed[pygame.K_UP] and playerY >= 3: playerY -= 3
@@ -178,7 +214,50 @@ while not done:
 
         screen.fill((0, 0, 0))
         pygame.draw.rect(screen, (0, 255, 0), pygame.Rect(0, 316, 480, 4))
-        screen.blit(player_image, (222, 275))
+
+        # Draw the player base
+        base_x = 240
+        base_y = 305
+        screen.blit(player_base_image, (base_x - player_base_image.get_width() // 2, base_y - player_base_image.get_height() // 2))
+
+        # Calculate the angle between the player position and the player's square position
+        dx = playerX - base_x
+        dy = playerY - base_y
+        angle = math.degrees(math.atan2(-dy, dx))  # Negate dy to correct the angle
+
+        # Add initial rotation of 45 degrees
+        initial_rotation = -89.5
+        angle += initial_rotation
+
+        # Define the custom pivot point for rotation (coordinates relative to the image)
+        pivot_point = (4, 15)  # (x, y) of the red dot in player_gun2.png
+
+        # Rotate the gun image around the custom pivot point (red dot)
+        gun_rect = blit_rotate_center(screen, player_gun_image, (base_x + 1, base_y + 3 - pivot_point[1]), angle, pivot_point)
+
+        # Calculate the tip of the gun based on rotation
+        gun_tip_x = gun_rect.centerx + math.cos(math.radians(-angle)) + 0
+        gun_tip_y = gun_rect.centery - math.sin(math.radians(-angle)) // 2
+
+        # Visualize the gun tip position
+        #pygame.draw.circle(screen, (255, 0, 0), (int(gun_tip_x), int(gun_tip_y)), 3)
+
+        if projectile_state == "fire":
+            # Draw the projectile
+            pygame.draw.circle(screen, projectile_color, (int(projectile_x), int(projectile_y)), 3)
+            pygame.draw.line(screen, projectile_color, (gun_tip_x, gun_tip_y), (projectile_x, projectile_y), 1)
+
+            # Move the projectile
+            projectile_x += projectile_dx
+            projectile_y += projectile_dy
+
+            # Check for collision with the target position
+            if math.sqrt((projectile_x - bombX) ** 2 + (projectile_y - bombY) ** 2) < 5:
+                bomb_state = "fire"
+                bombX = projectile_x
+                bombY = projectile_y
+                projectile_state = "ready"
+
         for city in cities:
             if city.status == "alive":
                 screen.blit(city.sprite, (city.x, city.y))
@@ -236,9 +315,7 @@ while not done:
 
         if bomb_state == "fire":
             bombRadius += 1
-            if bombRadius <= 14:
-                pygame.draw.line(screen, (0, 255, 0), (bombX, bombY), (240, 280))
-            fire_bomb(bombX, bombY, bombRadius)
+            pygame.draw.circle(screen, bombColor, (int(bombX), int(bombY)), bombRadius, 1)
             if bombRadius >= bombRange:
                 bombRadius = 10
                 bomb_state = "ready"
