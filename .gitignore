@@ -1,2 +1,7 @@
 __pycache__
 .DS_Store
+.DS_Store
+img/.DS_Store
+modules/.DS_Store
+modules/atomic-command/.DS_Store
+modules/data/.DS_Store
